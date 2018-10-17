@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style x:Key="TextBoxOnDialog" TargetType="{x:Type TextBox}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="Margin" Value="0,5,0,5" />
+    </Style>
+    <Style x:Key="LabelBoxOnDialog" TargetType="{x:Type Label}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="FolderButton" TargetType="{x:Type Button}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="Width" Value="22" />
+    </Style>
+
+    <Style x:Key="DialogButton" TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="22" />
+        <Setter Property="MinWidth" Value="95" />
+        <Setter Property="Margin" Value="5,10,0,0" />
+    </Style>
+
+</ResourceDictionary>

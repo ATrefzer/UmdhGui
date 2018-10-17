@@ -1,0 +1,96 @@
+﻿<Window x:Class="UmdhGui.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UmdhGui"
+        xmlns:converter="clr-namespace:UmdhGui.Converter"
+        mc:Ignorable="d"
+        Title="{x:Static local:Strings.Settings}" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <converter:BoolToImageConverter x:Key="BoolToImageState" TrueImage="pack://application:,,,/Images/StatusOk.ico"
+                                    FalseImage="pack://application:,,,/Images/StatusCriticalError.ico" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+
+
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Tool directory -->
+        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static local:Strings.ToolDirectory}"
+               Target="{Binding ElementName=ToolDir}" />
+        <Image Grid.Row="0" Grid.Column="1"
+               Source="{Binding IsToolDirectoryValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
+        <TextBox Style="{StaticResource TextBoxOnDialog}" Grid.Row="0" Grid.Column="2" Text="{Binding ToolDirectory}"
+                 Name="ToolDir" />
+        <Button Style="{StaticResource FolderButton}" Grid.Row="0" Grid.Column="3" Content="..."
+                Command="{Binding ChooseDirectoryCommand}"
+                CommandParameter="{x:Static local:Constants.SelectToolDirectoryCommandParameter}" />
+
+        <!-- Umdh -->
+        <Label Grid.Row="1" Grid.Column="0" Content="{x:Static local:Strings.Umdh}" />
+        <Image Grid.Row="1" Grid.Column="1"
+               Source="{Binding IsPathToUmdhValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
+
+        <!-- GFlags -->
+        <Label Grid.Row="2" Grid.Column="0" Content="GFlags" />
+        <Image Grid.Row="2" Grid.Column="1"
+               Source="{Binding IsPathToGFlagsValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
+
+        <!-- Output directory -->
+        <Label Grid.Row="3" Grid.Column="0" Content="{x:Static local:Strings.OutputDirectory}"
+               Target="{Binding ElementName=OutDir}" />
+        <Image Grid.Row="3" Grid.Column="1"
+               Source="{Binding IsOutputDirectoryValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
+        <TextBox Style="{StaticResource TextBoxOnDialog}" Grid.Row="3" Grid.Column="2" Text="{Binding OutputDirectory}"
+                 Name="OutDir" />
+        <Button Style="{StaticResource FolderButton}" Grid.Row="3" Grid.Column="3" Content="..."
+                Command="{Binding ChooseDirectoryCommand}"
+                CommandParameter="{x:Static local:Constants.SelectOutputDirectoryCommandParameter}" />
+
+        <!-- Symbol Path -->
+        <Label Grid.Row="4" Grid.Column="0" Content="{x:Static local:Strings.SymbolPath}"
+               Target="{Binding ElementName=SymPath}" />
+        <Image Grid.Row="4" Grid.Column="1"
+               Source="{Binding IsSymbolPathValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
+        <TextBox Style="{StaticResource TextBoxOnDialog}" Grid.Row="4" Grid.Column="2" Text="{Binding SymbolPath}"
+                 Name="SymPath" />
+        <Image Grid.Row="4" Grid.Column="3" Source="/UmdhGui;component/Images/StatusWarning.ico" Width="16" Height="16"
+               HorizontalAlignment="Left" Margin="5,0,5,0"
+               Visibility="{Binding ShowSymbolPathOverrideWarning,Converter={StaticResource ResourceKey=BoolToVisibility}}"
+               ToolTip="{x:Static local:Strings.TooltipShowSymbolPathOverrideWarning}" />
+
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="{x:Static local:Strings.Clean}" Command="{Binding CleanOutputCommand}"
+                    Style="{StaticResource DialogButton}" />
+            <Button Content="{x:Static local:Strings.Close}" IsDefault="True" Click="Click_Ok"
+                    Style="{StaticResource DialogButton}" />
+        </StackPanel>
+
+    </Grid>
+
+
+</Window>

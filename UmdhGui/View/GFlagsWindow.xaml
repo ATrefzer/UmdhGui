@@ -1,0 +1,61 @@
+﻿<Window x:Class="UmdhGui.View.GFlagsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UmdhGui"
+        mc:Ignorable="d"
+        Title="{x:Static local:Strings.ImageFileExecutionOptions}" Height="200" Width="450" WindowStyle="ToolWindow"
+        SizeToContent="WidthAndHeight">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Label Style="{StaticResource LabelBoxOnDialog}" Content="{x:Static local:Strings.ImageName}" Grid.Row="0"
+               Grid.Column="0" Target="{Binding ElementName=ImageName}" />
+        <TextBox Style="{StaticResource TextBoxOnDialog}" Text="{Binding ImageName}" Grid.Row="0"  Grid.Column="1" Name="ImageName" />
+
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static local:Strings.UserModeStacktraceDatabase}"
+                  Margin="0,10,0,0">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Label Style="{StaticResource LabelBoxOnDialog}" Grid.Row="0" Grid.Column="0"
+                       Content="{x:Static local:Strings.Enabled}" Target="{Binding ElementName=UstEnabled}" />
+                <CheckBox IsChecked="{Binding IsUserModeStackTraceDbEnabled}" Grid.Column="1" Grid.Row="0"
+                          VerticalAlignment="Center" Content="" FocusVisualStyle="{x:Null}" x:Name="UstEnabled" />
+
+                <Label Style="{StaticResource LabelBoxOnDialog}" Grid.Row="1" Grid.Column="0"
+                       Target="{Binding ElementName=Size}" Content="{x:Static local:Strings.DatabaseSize}" />
+                <TextBox Style="{StaticResource TextBoxOnDialog}" Text="{Binding UserModeStackTraceDbSize}"
+                         Grid.Column="1" Grid.Row="1" Name="Size" />
+
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="{x:Static local:Strings.Write}" Style="{StaticResource DialogButton}"
+                    Command="{Binding WriteCommand}" />
+            <Button Content="{x:Static local:Strings.Close}" IsCancel="True" 
+                    Style="{StaticResource DialogButton}" />
+        </StackPanel>
+
+    </Grid>
+</Window>

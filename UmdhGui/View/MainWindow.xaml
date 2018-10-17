@@ -1,0 +1,202 @@
+﻿<RibbonWindow x:Class="UmdhGui.View.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:local="clr-namespace:UmdhGui"
+              xmlns:converter="clr-namespace:UmdhGui.Converter"
+
+              Icon="pack://application:,,,/Images/bug_19x.ico"
+              mc:Ignorable="d"
+              Title="{x:Static local:Strings.Title}" Height="450" Width="575">
+    <RibbonWindow.Resources>
+        <converter:BoolToImageConverter x:Key="BoolToImageSettings"
+                                    TrueImage="pack://application:,,,/Images/SettingsFile_16x.png"
+                                    FalseImage="pack://application:,,,/Images/SettingsFileError_16x.png" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisible" />
+    </RibbonWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Ribbon Grid.Row="0" Visibility="Visible">
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu Visibility="Collapsed" />
+            </Ribbon.ApplicationMenu>
+
+            <Ribbon.QuickAccessToolBar>
+                <x:Null />
+            </Ribbon.QuickAccessToolBar>
+
+            <Ribbon.HelpPaneContent>
+                <x:Null />
+            </Ribbon.HelpPaneContent>
+
+            <RibbonTab Header="{x:Static local:Strings.Home}">
+
+                <!-- Process group -->
+                <RibbonGroup Header="{x:Static local:Strings.Process}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static local:Strings.ProcessId}" />
+                        <RibbonTextBox Grid.Row="0" Grid.Column="1" Text="{Binding InspectionProcess.ProcessId}"
+                                       IsReadOnly="True" />
+                        <RibbonButton Grid.Row="0" Grid.Column="2"
+                                      SmallImageSource="pack://application:,,,/Images/process.ico" Margin="5,0,0,0"
+                                      Command="{Binding SelectProcessCommand}" />
+
+
+                        <Label Grid.Row="1" Grid.Column="1" Content="{x:Static local:Strings.Tools}" />
+                        <RibbonSplitButton Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"
+                                           SmallImageSource="pack://application:,,,/Images/Property.ico"
+                                           Margin="5,0,0,0">
+                            <!-- ImageSource, not Icon -->
+                            <!-- Use RibbonMenuItem instead of RibbonSplitMenuItem. Otherwise the command is executed twice. -->
+                            <RibbonMenuItem ImageSource="pack://application:,,,/Images/FlagStraight_16x.png"
+                                            Header="{x:Static local:Strings.GFlags}"
+                                            Command="{Binding ConfigureGFlagsCommand}"
+                                            CommandParameter="{Binding InspectionProcess}" />
+                            <RibbonMenuItem ImageSource="pack://application:,,,/Images/Run_grey_32xLG.png"
+                                            Header="{x:Static local:Strings.RunOaNoCache}"
+                                            Command="{Binding StartProcessCommand}" />
+                        </RibbonSplitButton>
+
+                    </Grid>
+                </RibbonGroup>
+
+                <!-- Snapshot Group -->
+                <RibbonGroup Header="{x:Static local:Strings.SnapshotGroup}">
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/TakeSnapshot_16x.png"
+                                  Label="{x:Static local:Strings.Take}" Command="{Binding TakeSnapshotCommand}" />
+
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/Compare_16x.png"
+                                  Label="{x:Static local:Strings.Compare}" Command="{Binding CompareSnapshotsCommand}" />
+
+                    <Grid Margin="5, 0, 0, 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="{x:Static local:Strings.FirstSnapshot}" Grid.Row="0" Grid.Column="0"
+                               VerticalAlignment="Center" />
+
+                        <RibbonComboBox IsEditable="False" Grid.Row="0" Grid.Column="1" Width="100">
+                            <RibbonGallery SelectedItem="{Binding Path=FirstSnapshot, Mode=TwoWay}">
+                                <RibbonGalleryCategory ItemsSource="{Binding Path=Snapshots}" DisplayMemberPath="Name" />
+                            </RibbonGallery>
+                        </RibbonComboBox>
+
+                        <Label Content="{x:Static local:Strings.SecondSnapshot}" Grid.Row="1" Grid.Column="0"
+                               VerticalAlignment="Center" />
+                        <RibbonComboBox IsEditable="False" Grid.Row="1" Grid.Column="1" Width="100">
+                            <RibbonGallery SelectedItem="{Binding Path=SecondSnapshot, Mode=TwoWay}">
+                                <RibbonGalleryCategory ItemsSource="{Binding Path=Snapshots}" DisplayMemberPath="Name" />
+                            </RibbonGallery>
+                        </RibbonComboBox>
+
+
+                    </Grid>
+
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/ImportFile_16x.png"
+                                  Label="{x:Static local:Strings.Load}" Command="{Binding LoadDiffFileCommand}" />
+
+                </RibbonGroup>
+
+                <!-- Settings Group -->
+                <RibbonGroup Header="{x:Static local:Strings.Settings}">
+                    <RibbonButton Command="{Binding SettingsCommand}"
+                                  LargeImageSource="{Binding Settings.IsValid, Converter={StaticResource BoolToImageSettings}}"
+                                  Label="{x:Static local:Strings.Settings}" />
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+
+        <!-- Filter -->
+        <Expander Grid.Row="1" Header="{x:Static local:Strings.FilterGroup}" IsExpanded="False" Padding="5">
+            <DockPanel>
+                <Label Content="{x:Static local:Strings.Filter}" DockPanel.Dock="Left" Margin="0,0,5,0"
+                       ToolTip="{x:Static local:Strings.TooltipFilter}" />
+                <TextBox Text="{Binding FilterExpression}" HorizontalAlignment="Stretch"
+                         VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="22"
+                         KeyDown="TextBox_KeyDown" />
+            </DockPanel>
+        </Expander>
+
+        <!-- Trace data -->
+        <DataGrid Grid.Row="2" ItemsSource="{Binding TracesView}" AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedTrace}"
+                  CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False"
+                  CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False"
+                  IsReadOnly="True" SelectionMode="Single">
+
+            <!-- 
+            Wtf: IsSynchronizedWithCurrentItem takes care that a new CollectionView does not automatically select the first item.
+            SelectedValue="{Binding Details, Mode=OneWayToSource}" SelectedValuePath="Stack"
+            CurrentItem="{Binding CurrentTrace, Mode=OneWayToSource}"
+            -->
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static local:Strings.TraceId}" Binding="{Binding TraceId}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.CountDelta}" Binding="{Binding CountDelta}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.NewCount}" Binding="{Binding NewCount}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.OldCount}" Binding="{Binding OldCount}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.BytesDelta}" Binding="{Binding BytesDelta}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.NewBytes}" Binding="{Binding NewBytes}" />
+                <DataGridTextColumn Header="{x:Static local:Strings.OldBytes}" Binding="{Binding OldBytes}" Width="*" />
+
+
+                <!--
+                Include stack trace in table
+                <DataGridTextColumn Header="{x:Static local:Strings.Stack}" Binding="{Binding Stack}" CanUserSort="False"  />
+                -->
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <GridSplitter Grid.Row="3" Grid.Column="0" Height="5" HorizontalAlignment="Stretch" />
+
+        <!-- If height is set, the text box will not fill the splitter pane when resized. So set initial value in row definition instead. -->
+        <TextBox Grid.Row="4" IsReadOnly="True" Text="{Binding Details}"
+                 Background="LightYellow" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <!-- 
+        Binding directly to DataGrid
+        Text="{Binding Path=SelectedItem.Stack,ElementName=traceGrid}" 
+        
+        
+        -->
+
+        <StatusBar Grid.Row="5" Height="20">
+            <StatusBarItem>
+                <Separator />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ProgressBar IsIndeterminate="True" Width="100" Height="20"
+                             Visibility="{Binding IsUmdhActive, Converter={StaticResource BoolToVisible}}" />
+            </StatusBarItem>
+
+        </StatusBar>
+    </Grid>
+</RibbonWindow>
