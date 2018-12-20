@@ -36,7 +36,8 @@
     <CodeAnalysisRuleSet>UmdhGui.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\Bug_19x.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -177,46 +178,36 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Property.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StatusWarning.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StatusCriticalError.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StatusOK.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\TakeSnapshot_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Compare_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Process.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Bug_19x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Bug_19x.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SettingsFileError_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SettingsFile_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\ImportFile_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\FlagStraight_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Run_grey_32xLG.png" />
+    <Resource Include="Images\Bug_16x.ico" />
+    <Resource Include="Images\Bug_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TakeSnapshot_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Compare_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ImportFile_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SettingsFileError_32x.png" />
+    <Resource Include="Images\SettingsFile_32x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StatusCriticalError.png" />
+    <Resource Include="Images\StatusOk.png" />
+    <Resource Include="Images\StatusWarning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\run_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\process.png" />
+    <Resource Include="Images\property.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

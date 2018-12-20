@@ -9,8 +9,8 @@
         Title="{x:Static local:Strings.Settings}" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight">
 
     <Window.Resources>
-        <converter:BoolToImageConverter x:Key="BoolToImageState" TrueImage="pack://application:,,,/Images/StatusOk.ico"
-                                    FalseImage="pack://application:,,,/Images/StatusCriticalError.ico" />
+        <converter:BoolToImageConverter x:Key="BoolToImageState" TrueImage="pack://application:,,,/Images/StatusOk.png"
+                                    FalseImage="pack://application:,,,/Images/StatusCriticalError.png" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Window.Resources>
 
@@ -76,7 +76,7 @@
                Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
         <TextBox Style="{StaticResource TextBoxOnDialog}" Grid.Row="4" Grid.Column="2" Text="{Binding SymbolPath}"
                  Name="SymPath" />
-        <Image Grid.Row="4" Grid.Column="3" Source="/UmdhGui;component/Images/StatusWarning.ico" Width="16" Height="16"
+        <Image Grid.Row="4" Grid.Column="3" Source="/UmdhGui;component/Images/StatusWarning.png" Width="16" Height="16"
                HorizontalAlignment="Left" Margin="5,0,5,0"
                Visibility="{Binding ShowSymbolPathOverrideWarning,Converter={StaticResource ResourceKey=BoolToVisibility}}"
                ToolTip="{x:Static local:Strings.TooltipShowSymbolPathOverrideWarning}" />

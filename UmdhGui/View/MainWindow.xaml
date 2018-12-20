@@ -6,13 +6,13 @@
               xmlns:local="clr-namespace:UmdhGui"
               xmlns:converter="clr-namespace:UmdhGui.Converter"
 
-              Icon="pack://application:,,,/Images/bug_19x.ico"
+              Icon="pack://application:,,,/Images/bug_16x.ico"
               mc:Ignorable="d"
               Title="{x:Static local:Strings.Title}" Height="450" Width="575">
     <RibbonWindow.Resources>
         <converter:BoolToImageConverter x:Key="BoolToImageSettings"
-                                    TrueImage="pack://application:,,,/Images/SettingsFile_16x.png"
-                                    FalseImage="pack://application:,,,/Images/SettingsFileError_16x.png" />
+                                    TrueImage="pack://application:,,,/Images/SettingsFile_32x.png"
+                                    FalseImage="pack://application:,,,/Images/SettingsFileError_32x.png" />
         <BooleanToVisibilityConverter x:Key="BoolToVisible" />
     </RibbonWindow.Resources>
 
@@ -60,13 +60,13 @@
                         <RibbonTextBox Grid.Row="0" Grid.Column="1" Text="{Binding InspectionProcess.ProcessId}"
                                        IsReadOnly="True" />
                         <RibbonButton Grid.Row="0" Grid.Column="2"
-                                      SmallImageSource="pack://application:,,,/Images/process.ico" Margin="5,0,0,0"
+                                      SmallImageSource="pack://application:,,,/Images/process.png" Margin="5,0,0,0"
                                       Command="{Binding SelectProcessCommand}" />
 
 
                         <Label Grid.Row="1" Grid.Column="1" Content="{x:Static local:Strings.Tools}" />
                         <RibbonSplitButton Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"
-                                           SmallImageSource="pack://application:,,,/Images/Property.ico"
+                                           SmallImageSource="pack://application:,,,/Images/Property.png"
                                            Margin="5,0,0,0">
                             <!-- ImageSource, not Icon -->
                             <!-- Use RibbonMenuItem instead of RibbonSplitMenuItem. Otherwise the command is executed twice. -->
@@ -74,7 +74,7 @@
                                             Header="{x:Static local:Strings.GFlags}"
                                             Command="{Binding ConfigureGFlagsCommand}"
                                             CommandParameter="{Binding InspectionProcess}" />
-                            <RibbonMenuItem ImageSource="pack://application:,,,/Images/Run_grey_32xLG.png"
+                            <RibbonMenuItem ImageSource="pack://application:,,,/Images/Run_16x.png"
                                             Header="{x:Static local:Strings.RunOaNoCache}"
                                             Command="{Binding StartProcessCommand}" />
                         </RibbonSplitButton>
@@ -84,10 +84,10 @@
 
                 <!-- Snapshot Group -->
                 <RibbonGroup Header="{x:Static local:Strings.SnapshotGroup}">
-                    <RibbonButton LargeImageSource="pack://application:,,,/Images/TakeSnapshot_16x.png"
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/TakeSnapshot_32x.png"
                                   Label="{x:Static local:Strings.Take}" Command="{Binding TakeSnapshotCommand}" />
 
-                    <RibbonButton LargeImageSource="pack://application:,,,/Images/Compare_16x.png"
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/Compare_32x.png"
                                   Label="{x:Static local:Strings.Compare}" Command="{Binding CompareSnapshotsCommand}" />
 
                     <Grid Margin="5, 0, 0, 0">
@@ -120,7 +120,7 @@
 
                     </Grid>
 
-                    <RibbonButton LargeImageSource="pack://application:,,,/Images/ImportFile_16x.png"
+                    <RibbonButton LargeImageSource="pack://application:,,,/Images/ImportFile_32x.png"
                                   Label="{x:Static local:Strings.Load}" Command="{Binding LoadDiffFileCommand}" />
 
                 </RibbonGroup>
