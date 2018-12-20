@@ -9,6 +9,7 @@ UmdhGui is a graphical user interface for this utility.
 As a prerequisite you need to have the latest WinDbg from the Windows SDK installed.
 
 Compile and run the application
+
 ![Main Window](ScreenShots/main.PNG)
 
 Then click the settings button to choose the directory where the WinDbg.exe is located. 
