@@ -7,7 +7,7 @@
         xmlns:converter="clr-namespace:UmdhGui.Converter"
         mc:Ignorable="d"
         Title="{x:Static local:Strings.Settings}" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight"
-        MaxWidth="1200" MinHeight="230">
+        MaxWidth="1200" MaxHeight="800" MinHeight="230" MinWidth="560">
 
     <Window.Resources>
         <converter:BoolToImageConverter x:Key="BoolToImageState" TrueImage="pack://application:,,,/Images/StatusOk.png"
