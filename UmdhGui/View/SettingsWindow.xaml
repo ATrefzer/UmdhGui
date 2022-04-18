@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UmdhGui"
         xmlns:converter="clr-namespace:UmdhGui.Converter"
         mc:Ignorable="d"
-        Title="{x:Static local:Strings.Settings}" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight">
+        Title="{x:Static local:Strings.Settings}" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight"
+        MaxWidth="1200" MinHeight="230">
 
     <Window.Resources>
         <converter:BoolToImageConverter x:Key="BoolToImageState" TrueImage="pack://application:,,,/Images/StatusOk.png"
@@ -28,7 +29,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -73,11 +74,12 @@
                Target="{Binding ElementName=SymPath}" />
         <Image Grid.Row="4" Grid.Column="1"
                Source="{Binding IsSymbolPathValid, Converter={StaticResource ResourceKey= BoolToImageState}}"
-               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" />
-        <TextBox Style="{StaticResource TextBoxOnDialog}" Grid.Row="4" Grid.Column="2" Text="{Binding SymbolPath}"
-                 Name="SymPath" />
+               Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top"/>
+        <TextBox  Grid.Row="4" Grid.Column="2" Text="{Binding SymbolPath}"
+                 Name="SymPath" HorizontalAlignment="Stretch"  TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch"
+                 VerticalScrollBarVisibility="Auto"/>
         <Image Grid.Row="4" Grid.Column="3" Source="/UmdhGui;component/Images/StatusWarning.png" Width="16" Height="16"
-               HorizontalAlignment="Left" Margin="5,0,5,0"
+               HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top"
                Visibility="{Binding ShowSymbolPathOverrideWarning,Converter={StaticResource ResourceKey=BoolToVisibility}}"
                ToolTip="{x:Static local:Strings.TooltipShowSymbolPathOverrideWarning}" />
 
