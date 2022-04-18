@@ -201,17 +201,40 @@ namespace UmdhGui.ViewModel
                 return true;
             }
 
-            var tokens = FilterExpression.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var token in tokens)
+            var tokens = FilterExpression.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToList();
+
+            var exclusive = tokens
+                .Where(t => t.StartsWith("--"))
+                .Select(t => t.Substring(2))
+                .Where(t => string.IsNullOrEmpty(t) is false)
+                .ToList();
+
+            var inclusive = tokens.Where(t => t.StartsWith("--") is false).ToList();
+
+            return CheckAtLeastOneInclusivePatternMatches(trace, inclusive) &&
+                   CheckNoExclusivePatternMatches(trace, exclusive);
+        }
+
+        static bool CheckAtLeastOneInclusivePatternMatches(Trace trace, IReadOnlyCollection<string> inclusive)
+        {
+            if (inclusive.Count == 0)
             {
-                if (trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    return true;
-                }
+                return true;
             }
 
-            return false;
+            return inclusive.Any(token => trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0);
         }
+
+        static bool CheckNoExclusivePatternMatches(Trace trace, IReadOnlyCollection<string> exclusive)
+        {
+            if (exclusive.Count == 0)
+            {
+                return true;
+            }
+
+            return exclusive.All(token => trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) < 0);
+        }
+
 
         private void ExecuteSelectProcess()
         {

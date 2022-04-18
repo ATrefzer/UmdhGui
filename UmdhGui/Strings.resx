@@ -244,7 +244,7 @@
     <value>Tools</value>
   </data>
   <data name="TooltipFilter" xml:space="preserve">
-    <value>Case insensitive substrings that have to be in the stack trace. You can separate multiple substrings with a ;</value>
+    <value>Case insensitive substrings that have to be in the stack trace. You can separate multiple substrings with a ; and you can negate them with --</value>
   </data>
   <data name="TooltipShowSymbolPathOverrideWarning" xml:space="preserve">
     <value>This warning means that a symbol path different from the _NT_SYMBOL_PATH is used.</value>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UmdhGui.Model.Parser
 {
@@ -49,8 +50,12 @@ namespace UmdhGui.Model.Parser
 
             Trace de;
             while ((de = ParseDiffEntry()) != null)
+            {
                 if (de.HasBody)
+                {
                     list.Add(de);
+                }
+            }
 
             return list;
         }
@@ -65,7 +70,9 @@ namespace UmdhGui.Model.Parser
             while ((c = _scanner.PeekChar()) != 0)
             {
                 if (c == '+' || c == '-')
+                {
                     return;
+                }
 
                 _scanner.ReadTextBlock(); //Garbage
             }
@@ -82,7 +89,9 @@ namespace UmdhGui.Model.Parser
             // + or - (Trace file may be empty!)
             var c = _scanner.PeekChar();
             if (c != '+' && c != '-')
+            {
                 return null;
+            }
 
             ParseHeader(entry);
 
@@ -106,7 +115,7 @@ namespace UmdhGui.Model.Parser
             entry.Stack = _scanner.ReadTextBlock();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "direction")]
+        [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "direction")]
         private void ParseHeader(Trace entry)
         {
             // First line
@@ -139,7 +148,10 @@ namespace UmdhGui.Model.Parser
             //Sometimes there are entries that are not valid.
             //This filters them out.
             if (notInteresting != "allocs")
+            {
                 entry.HasBody = false;
+            }
+
             //Set HasBody to false
             entry.TraceId = _scanner.ReadTextToken();
 
@@ -148,7 +160,9 @@ namespace UmdhGui.Model.Parser
 
             var c = _scanner.PeekChar();
             if (c != '+' && c != '-')
+            {
                 return;
+            }
 
 
             // ReSharper disable once RedundantAssignment
