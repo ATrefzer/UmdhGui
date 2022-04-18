@@ -21,12 +21,15 @@ namespace UmdhGui
             _inspectionProcess = inspectionProcess;
         }
 
-        public string ShowFolderDialog()
+        public string ShowFolderDialog(string startDir)
         {
             var path = string.Empty;
             using (var dlg = new CommonOpenFileDialog())
             {
-                //dlg.InitialDirectory = "C:\\";
+                if (string.IsNullOrEmpty(startDir) is false)
+                {
+                    dlg.InitialDirectory = startDir;
+                }
                 dlg.IsFolderPicker = true;
                 dlg.Multiselect = false;
                 if (dlg.ShowDialog() == CommonFileDialogResult.Ok)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using UmdhGui.Infrastructure;
@@ -18,14 +19,14 @@ namespace UmdhGui.ViewModel
         {
             _settings = settings;
             _controller = controller;
-            ChooseDirectoryCommand = new Command(ExecuteChooseDirectory);
+            ChooseOutputDirectoryCommand = new Command(ExecuteChooseOutputDirectory);
+            ChooseToolDirectoryCommand = new Command(ExecuteChooseToolDirectory);
             CleanOutputCommand = new Command(obj => snapshotManager.CleanOutputDirectory());
         }
 
-        /// <summary>
-        ///     Which directory to select is passed by the command parameter.
-        /// </summary>
-        public ICommand ChooseDirectoryCommand { get; }
+     
+        public ICommand ChooseOutputDirectoryCommand { get; }
+        public ICommand ChooseToolDirectoryCommand { get; }
 
         public ICommand CleanOutputCommand { get; private set; }
 
@@ -126,16 +127,23 @@ namespace UmdhGui.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
-
-        private void ExecuteChooseDirectory(object parameter)
+        private void ExecuteChooseOutputDirectory(object parameter)
         {
-            var directory = _controller.ShowFolderDialog();
+            var startDir = Directory.Exists(OutputDirectory) ? OutputDirectory : null;
+            var directory = _controller.ShowFolderDialog(startDir);
             if (string.IsNullOrEmpty(directory) == false)
             {
-                if (Equals(parameter, Constants.SelectOutputDirectoryCommandParameter))
-                    OutputDirectory = directory;
-                if (Equals(parameter, Constants.SelectToolDirectoryCommandParameter))
-                    ToolDirectory = directory;
+                OutputDirectory = directory;
+            }
+        }
+
+        private void ExecuteChooseToolDirectory(object parameter)
+        {
+            var startDir = Directory.Exists(ToolDirectory) ? ToolDirectory : null;
+            var directory = _controller.ShowFolderDialog(startDir);
+            if (string.IsNullOrEmpty(directory) == false)
+            {
+                ToolDirectory = directory;
             }
         }
 
