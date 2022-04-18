@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -29,8 +30,11 @@ namespace UmdhGui
                 dlg.IsFolderPicker = true;
                 dlg.Multiselect = false;
                 if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+                {
                     path = dlg.FileName;
+                }
             }
+
             return path;
         }
 
@@ -43,20 +47,23 @@ namespace UmdhGui
             dlg.ShowDialog();
         }
 
+    
+
         public Process ShowProcessDialog()
         {
             var dlg = new ProcessWindow();
 
-            var processes = Process.GetProcesses().OrderBy(proc => proc.ProcessName).ToList();
+            var processes = Process.GetProcesses().OrderBy(proc => proc.ProcessName).Select(p => new ProcessDetails(p)).ToList();
 
             var vm = new ProcessViewModel(processes);
             dlg.DataContext = vm;
             dlg.Owner = Application.Current.MainWindow;
             var result = dlg.ShowDialog();
             if (result == true && vm.Selected != null)
-                return vm.Selected;
+            {
+                return vm.Selected.Process;
+            }
 
-            // STYLE? The action with the selected process is not performed here but in the view model.
 
             return null;
         }
@@ -68,7 +75,9 @@ namespace UmdhGui
             {
                 var settings = Application.Current.Properties[Constants.SettingsKey] as ApplicationSettings;
                 if (settings == null)
+                {
                     return;
+                }
 
                 var dlg = new GFlagsWindow();
                 var vm = new GFlagsViewModel(new GFlags(settings.ToolDirectory, new ProcessHelper()), processId);
@@ -92,7 +101,9 @@ namespace UmdhGui
             openFileDialog.InitialDirectory = initDir;
             openFileDialog.Filter = filter;
             if (openFileDialog.ShowDialog() == false)
+            {
                 return null;
+            }
 
             return openFileDialog.FileName;
         }

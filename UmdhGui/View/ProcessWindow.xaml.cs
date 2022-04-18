@@ -7,7 +7,7 @@ namespace UmdhGui.View
 {
     /// <summary>
     ///     Interaction logic for ProcessSelectionWindow.xaml
-    ///     Seleted process is found (binding) in the view model after the window is closed.
+    ///     Selected process is found (binding) in the view model after the window is closed.
     /// </summary>
     public partial class ProcessWindow
     {
@@ -24,15 +24,6 @@ namespace UmdhGui.View
         private void ProcessList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DialogResult = true;
-        }
-
-        private void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var vm = DataContext as ProcessViewModel;
-            if (vm != null)
-            {
-              
-            }
         }
     }
 }

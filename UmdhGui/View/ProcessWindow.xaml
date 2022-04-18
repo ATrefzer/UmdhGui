@@ -17,18 +17,19 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource TextBoxOnDialog}" Text="{Binding Filter, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
-                 TextChanged="TextBoxBase_OnTextChanged" />
+        <TextBox Grid.Row="0" Grid.Column="0" Style="{StaticResource TextBoxOnDialog}" Text="{Binding Filter, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
 
         <DataGrid x:Name="Grid" ItemsSource="{Binding Processes}" Grid.Row="1" Grid.Column="0"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False"
                   CanUserReorderColumns="False"
+                  HeadersVisibility="Column"
                   IsReadOnly="True" SelectedItem="{Binding Selected, Mode=OneWayToSource}"
                   MouseDoubleClick="ProcessList_MouseDoubleClick" SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Id" Binding="{Binding ProcessId}" />
                 <DataGridTextColumn Header="Process Name" Binding="{Binding ProcessName}" Width="*" />
+                <DataGridTextColumn Header="Architecture" Binding="{Binding Architecture}" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
 

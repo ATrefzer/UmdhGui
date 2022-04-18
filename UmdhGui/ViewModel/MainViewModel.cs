@@ -8,6 +8,7 @@ using System.Windows.Input;
 using UmdhGui.Infrastructure;
 using UmdhGui.Model;
 using UmdhGui.Model.Parser;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace UmdhGui.ViewModel
@@ -24,7 +25,8 @@ namespace UmdhGui.ViewModel
         private Trace _selectedTrace;
         private List<Snapshot> _snapshots;
 
-        public MainViewModel(InspectionProcess inspectionProcess, SnapshotManager snapshotManager, SettingsViewModel settingsViewModel, ApplicationController controller)
+        public MainViewModel(InspectionProcess inspectionProcess, SnapshotManager snapshotManager, SettingsViewModel settingsViewModel,
+            ApplicationController controller)
         {
             InspectionProcess = inspectionProcess;
             SnapshotManager = snapshotManager;
@@ -33,8 +35,6 @@ namespace UmdhGui.ViewModel
 
             InspectionProcess.ProcessChanged += InspectionProcessOnProcessChanged;
 
-            // STYLE? Who exutes the commands? Dialogs are propagated to the ApplicationController, other code 
-            // is directly executed in the view model.
             TakeSnapshotCommand = Command.CreateWithRegistration(obj => ExecuteTakeSnapshot(),
                 obj => { return IsUmdhActive == false && InspectionProcess.IsRunning; });
 
@@ -50,22 +50,10 @@ namespace UmdhGui.ViewModel
             StartProcessCommand = new Command(obj => ApplicationController.ShowRunProcessDialog());
         }
 
-        private void InspectionProcessOnProcessChanged(object sender, EventArgs eventArgs)
-        {
-
-            TracesView = null;
-            Details = "";
-            SnapshotManager.ClearSnapshots();
-            FirstSnapshot = null;
-            SecondSnapshot = null;
-
-            Command.RefreshAll();
-        }
-
 
         public bool IsUmdhActive
         {
-            get { return _isUmdhActive; }
+            get => _isUmdhActive;
 
             set
             {
@@ -83,7 +71,7 @@ namespace UmdhGui.ViewModel
 
         public CollectionView TracesView
         {
-            get { return _collectionView; }
+            get => _collectionView;
 
             set
             {
@@ -100,7 +88,7 @@ namespace UmdhGui.ViewModel
 
         public List<Snapshot> Snapshots
         {
-            get { return _snapshots; }
+            get => _snapshots;
             set
             {
                 _snapshots = value;
@@ -110,7 +98,7 @@ namespace UmdhGui.ViewModel
 
         public Snapshot FirstSnapshot
         {
-            get { return _firstSnapshot; }
+            get => _firstSnapshot;
             set
             {
                 _firstSnapshot = value;
@@ -121,7 +109,7 @@ namespace UmdhGui.ViewModel
 
         public string FilterExpression
         {
-            get { return Settings.FilterExpression; }
+            get => Settings.FilterExpression;
             set
             {
                 // See TextBox_KeyDown in MainWindow to see why this property is updated.
@@ -135,7 +123,7 @@ namespace UmdhGui.ViewModel
 
         public Snapshot SecondSnapshot
         {
-            get { return _secondSnapshot; }
+            get => _secondSnapshot;
             set
             {
                 _secondSnapshot = value;
@@ -162,7 +150,7 @@ namespace UmdhGui.ViewModel
         /// </summary>
         public string Details
         {
-            get { return _details; }
+            get => _details;
 
             set
             {
@@ -175,7 +163,7 @@ namespace UmdhGui.ViewModel
 
         public Trace SelectedTrace
         {
-            get { return _selectedTrace; }
+            get => _selectedTrace;
 
             set
             {
@@ -188,17 +176,32 @@ namespace UmdhGui.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private void InspectionProcessOnProcessChanged(object sender, EventArgs eventArgs)
+        {
+            TracesView = null;
+            Details = "";
+            SnapshotManager.ClearSnapshots();
+            FirstSnapshot = null;
+            SecondSnapshot = null;
+
+            Command.RefreshAll();
+        }
+
         private bool FilterFunc(object obj)
         {
             // For the CollectionView showing the traces.
             var trace = obj as Trace;
             if (trace == null)
+            {
                 return false;
+            }
 
             if (string.IsNullOrEmpty(FilterExpression))
+            {
                 return true;
+            }
 
-            var tokens = FilterExpression.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+            var tokens = FilterExpression.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var token in tokens)
             {
                 if (trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0)
@@ -206,6 +209,7 @@ namespace UmdhGui.ViewModel
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -213,12 +217,13 @@ namespace UmdhGui.ViewModel
         {
             var process = ApplicationController.ShowProcessDialog();
             if (process != null)
+            {
                 InspectionProcess.SetProcess(process);
+            }
         }
 
         private void ExecuteSettings()
         {
-            // STYLE? Ok, to pass viewmodels around like this. VM -> Controller?
             ApplicationController.ShowSettingsDialog(Settings);
         }
 
@@ -243,7 +248,9 @@ namespace UmdhGui.ViewModel
         {
             var filePath = ApplicationController.ShowFileDialog(Settings.OutputDirectory, "Diff|*.umdhdiff");
             if (string.IsNullOrEmpty(filePath))
+            {
                 return;
+            }
 
             var diff = SnapshotManager.LoadDifferenceFile(filePath);
             ApplyDiff(diff);
@@ -255,7 +262,9 @@ namespace UmdhGui.ViewModel
             {
                 IsUmdhActive = true;
                 if (FirstSnapshot == null || SecondSnapshot == null)
+                {
                     return;
+                }
 
                 var diff = await SnapshotManager.DiffSnapshotsAsync(FirstSnapshot, SecondSnapshot);
 

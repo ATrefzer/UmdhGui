@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Data;
 
 namespace UmdhGui.ViewModel
@@ -9,7 +8,7 @@ namespace UmdhGui.ViewModel
     {
         private string _filter;
 
-        public ProcessViewModel(List<Process> processes)
+        public ProcessViewModel(List<ProcessDetails> processes)
         {
             Processes = new ListCollectionView(processes);
             Processes.Filter += FilterFunc;
@@ -17,7 +16,7 @@ namespace UmdhGui.ViewModel
 
         private bool FilterFunc(object obj)
         {
-            var process = obj as Process;
+            var process = obj as ProcessDetails;
             if (process == null)
                 return false;
 
@@ -43,7 +42,7 @@ namespace UmdhGui.ViewModel
         /// <summary>
         ///     Bound to selected item!
         /// </summary>
-        public Process Selected { get; set; }
+        public ProcessDetails Selected { get; set; }
 
         public string Filter
         {
