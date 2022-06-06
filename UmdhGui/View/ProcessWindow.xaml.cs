@@ -25,5 +25,15 @@ namespace UmdhGui.View
         {
             DialogResult = true;
         }
+
+        private void Grid_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Key.Enter == e.Key)
+            {
+                // DataGrid Enter moves to next line instead of triggering the default button.
+                DialogResult = true;
+                e.Handled = true;
+            }
+        }
     }
 }
