@@ -5,14 +5,15 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:local="clr-namespace:UmdhGui"
               xmlns:converter="clr-namespace:UmdhGui.Converter"
-
+              xmlns:viewModel="clr-namespace:UmdhGui.ViewModel"
+              d:DataContext="{d:DesignInstance viewModel:MainViewModel, IsDesignTimeCreatable=False}"
               Icon="pack://application:,,,/Images/bug_16x.ico"
               mc:Ignorable="d"
               Title="{x:Static local:Strings.Title}" Height="450" Width="575">
     <RibbonWindow.Resources>
         <converter:BoolToImageConverter x:Key="BoolToImageSettings"
-                                    TrueImage="pack://application:,,,/Images/SettingsFile_32x.png"
-                                    FalseImage="pack://application:,,,/Images/SettingsFileError_32x.png" />
+                                        TrueImage="pack://application:,,,/Images/SettingsFile_32x.png"
+                                        FalseImage="pack://application:,,,/Images/SettingsFileError_32x.png" />
         <BooleanToVisibilityConverter x:Key="BoolToVisible" />
     </RibbonWindow.Resources>
 
@@ -147,7 +148,7 @@
 
         <!-- Trace data -->
         <DataGrid Grid.Row="2" ItemsSource="{Binding TracesView}" AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedTrace}"
+                  SelectedItem="{Binding SelectedDiffEntry}"
                   CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False"
                   CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False"
                   IsReadOnly="True" SelectionMode="Single">
@@ -190,7 +191,7 @@
 
         <StatusBar Grid.Row="5" Height="20">
             <StatusBarItem>
-                <Separator />
+                <TextBlock Text="{Binding FilePath}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <ProgressBar IsIndeterminate="True" Width="100" Height="20"

@@ -129,7 +129,7 @@ namespace UmdhGui.Model
             return Task.Run(() =>
             {
                 var outputFileName = GenerateOutputFilename(olderSnapshot.FilePath, newerSnapshot.FilePath);
-                var outputFilePath = Path.Combine(_settings.OutputDirectory, outputFileName);
+                var outputFilePath = Path.GetFullPath(Path.Combine(_settings.OutputDirectory, outputFileName));
                 var procExe = Path.Combine(_settings.ToolDirectory, "umdh.exe");
                 var arguments = GetDiffArguments(olderSnapshot.FilePath, newerSnapshot.FilePath, outputFilePath);
                 var procOut = RunProcessWithSymbolPath(procExe, arguments);

@@ -28,6 +28,13 @@ namespace UmdhGui.Model.Parser
                 }
             }
 
+
+            if (entries.Count == 0)
+            {
+                // Dummy entry
+                entries.Add(new DiffEntry());
+            }
+
             return entries;
         }
 

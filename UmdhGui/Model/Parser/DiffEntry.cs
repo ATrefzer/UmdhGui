@@ -9,6 +9,18 @@ namespace UmdhGui.Model.Parser
         // + COUNT_DELTA (NEW_COUNT - OLD_COUNT) BackTrace TRACEID allocations
         //     ... stack trace ...    
 
+        public DiffEntry()
+        {
+            BytesDelta = 0;
+            CountDelta = 0;
+            HasBody = false;
+            NewBytes = 0;
+            OldBytes = 0;
+            OldCount = 0;
+            Stack = "";
+            TraceId = "No trace available";
+        }
+
         public string TraceId { get; set; }
 
         public int CountDelta { get; set; }

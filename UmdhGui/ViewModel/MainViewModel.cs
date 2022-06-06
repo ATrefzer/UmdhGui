@@ -17,6 +17,7 @@ namespace UmdhGui.ViewModel
     {
         private CollectionView _collectionView;
         private string _details;
+        private string _filePath;
         private Snapshot _firstSnapshot;
 
 
@@ -32,6 +33,7 @@ namespace UmdhGui.ViewModel
             SnapshotManager = snapshotManager;
             Settings = settingsViewModel;
             ApplicationController = controller;
+            FilePath = "No diff file loaded!";
 
             InspectionProcess.ProcessChanged += InspectionProcessOnProcessChanged;
 
@@ -159,6 +161,17 @@ namespace UmdhGui.ViewModel
             }
         }
 
+        public string FilePath
+        {
+            get => _filePath;
+            set
+            {
+                _filePath = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
         public ApplicationController ApplicationController { get; }
 
         public DiffEntry SelectedDiffEntry
@@ -215,7 +228,7 @@ namespace UmdhGui.ViewModel
                    CheckNoExclusivePatternMatches(trace, exclusive);
         }
 
-        static bool CheckAtLeastOneInclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> inclusive)
+        private static bool CheckAtLeastOneInclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> inclusive)
         {
             if (inclusive.Count == 0)
             {
@@ -225,7 +238,7 @@ namespace UmdhGui.ViewModel
             return inclusive.Any(token => diffEntry.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        static bool CheckNoExclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> exclusive)
+        private static bool CheckNoExclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> exclusive)
         {
             if (exclusive.Count == 0)
             {
@@ -303,6 +316,7 @@ namespace UmdhGui.ViewModel
         {
             // Show errors if any.
             Details = diff.Details;
+            FilePath = diff.FilePath;
 
             // Set IsSynchronizedWithCurrentItem on DataGrid. Otherwise the first item of the collection view gets automatically
             // selected. In this app the detail window shows also the error messages from the UMDH process.
