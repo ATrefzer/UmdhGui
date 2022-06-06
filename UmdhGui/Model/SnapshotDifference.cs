@@ -5,7 +5,7 @@ namespace UmdhGui.Model
 {
     internal class SnapshotDifference
     {
-        public List<Trace> Traces { get; set; }
+        public List<DiffEntry> Traces { get; set; }
 
         public string FilePath { get; set; }
 

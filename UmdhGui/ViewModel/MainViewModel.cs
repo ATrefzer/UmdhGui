@@ -22,7 +22,7 @@ namespace UmdhGui.ViewModel
 
         private bool _isUmdhActive;
         private Snapshot _secondSnapshot;
-        private Trace _selectedTrace;
+        private DiffEntry _selectedDiffEntry;
         private List<Snapshot> _snapshots;
 
         public MainViewModel(InspectionProcess inspectionProcess, SnapshotManager snapshotManager, SettingsViewModel settingsViewModel,
@@ -161,16 +161,16 @@ namespace UmdhGui.ViewModel
 
         public ApplicationController ApplicationController { get; }
 
-        public Trace SelectedTrace
+        public DiffEntry SelectedDiffEntry
         {
-            get => _selectedTrace;
+            get => _selectedDiffEntry;
 
             set
             {
-                _selectedTrace = value;
+                _selectedDiffEntry = value;
                 NotifyPropertyChanged();
 
-                Details = _selectedTrace?.Stack;
+                Details = _selectedDiffEntry?.Stack;
             }
         }
 
@@ -190,7 +190,7 @@ namespace UmdhGui.ViewModel
         private bool FilterFunc(object obj)
         {
             // For the CollectionView showing the traces.
-            var trace = obj as Trace;
+            var trace = obj as DiffEntry;
             if (trace == null)
             {
                 return false;
@@ -215,24 +215,24 @@ namespace UmdhGui.ViewModel
                    CheckNoExclusivePatternMatches(trace, exclusive);
         }
 
-        static bool CheckAtLeastOneInclusivePatternMatches(Trace trace, IReadOnlyCollection<string> inclusive)
+        static bool CheckAtLeastOneInclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> inclusive)
         {
             if (inclusive.Count == 0)
             {
                 return true;
             }
 
-            return inclusive.Any(token => trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0);
+            return inclusive.Any(token => diffEntry.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0);
         }
 
-        static bool CheckNoExclusivePatternMatches(Trace trace, IReadOnlyCollection<string> exclusive)
+        static bool CheckNoExclusivePatternMatches(DiffEntry diffEntry, IReadOnlyCollection<string> exclusive)
         {
             if (exclusive.Count == 0)
             {
                 return true;
             }
 
-            return exclusive.All(token => trace.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) < 0);
+            return exclusive.All(token => diffEntry.Stack.IndexOf(token, StringComparison.OrdinalIgnoreCase) < 0);
         }
 
 

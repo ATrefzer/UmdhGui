@@ -103,6 +103,7 @@
     <Compile Include="Infrastructure\ProcessHelper.cs" />
     <Compile Include="Model\GFlags.cs" />
     <Compile Include="Infrastructure\ProcessOutput.cs" />
+    <Compile Include="Model\Parser\DiffEntry.cs" />
     <Compile Include="Model\Snapshot.cs" />
     <Compile Include="Model\SnapshotDifference.cs" />
     <Compile Include="ViewModel\GFlagsViewModel.cs" />

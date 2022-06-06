@@ -94,7 +94,7 @@ namespace UmdhGui.Model
 
         public SnapshotDifference LoadDifferenceFile(string path)
         {
-            List<Trace> traces;
+            List<DiffEntry> traces;
             using (var stream = File.OpenText(path))
             {
                 var scanner = new Scanner(stream, false);

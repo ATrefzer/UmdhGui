@@ -1,37 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace UmdhGui.Model.Parser
 {
-    public class Trace
-    {
-        // + BYTES_DELTA ( - ) NEW_COUNT allocs BackTrace TRACEID 
-        // + COUNT_DELTA (NEW_COUNT - OLD_COUNT) BackTrace TRACEID allocations      
-        //     ... stack trace ...    
-
-        public string TraceId { get; set; }
-
-        public int CountDelta { get; set; }
-
-        public int NewCount { get; set; }
-
-        public int OldCount { get; set; }
-
-        public int BytesDelta { get; set; }
-
-        public int NewBytes { get; set; }
-
-        public int OldBytes { get; set; }
-
-
-        public string Stack { get; set; }
-
-
-        public bool HasBody { get; set; }
-    }
-
-
     internal class Parser
     {
         private readonly Scanner _scanner;
@@ -41,23 +12,23 @@ namespace UmdhGui.Model.Parser
             _scanner = scanner;
         }
 
-        public List<Trace> Parse()
+        public List<DiffEntry> Parse()
         {
-            var list = new List<Trace>();
+            var entries = new List<DiffEntry>();
 
 
             ReadGarbage();
 
-            Trace de;
+            DiffEntry de;
             while ((de = ParseDiffEntry()) != null)
             {
                 if (de.HasBody)
                 {
-                    list.Add(de);
+                    entries.Add(de);
                 }
             }
 
-            return list;
+            return entries;
         }
 
         // Reads until we find the first line of this kind
@@ -82,9 +53,9 @@ namespace UmdhGui.Model.Parser
         ///     Reads one stack item from the difference file. If there is no more null is returned.
         /// </summary>
         /// <returns></returns>
-        private Trace ParseDiffEntry()
+        private DiffEntry ParseDiffEntry()
         {
-            var entry = new Trace();
+            var entry = new DiffEntry();
 
             // + or - (Trace file may be empty!)
             var c = _scanner.PeekChar();
@@ -101,7 +72,7 @@ namespace UmdhGui.Model.Parser
             return entry;
         }
 
-        private void ParseStackTrace(Trace entry)
+        private void ParseStackTrace(DiffEntry entry)
         {
             // It is possible that the stack trace is empty!
             var c = _scanner.PeekChar();
@@ -115,16 +86,14 @@ namespace UmdhGui.Model.Parser
             entry.Stack = _scanner.ReadTextBlock();
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "direction")]
-        private void ParseHeader(Trace entry)
+        private void ParseHeader(DiffEntry entry)
         {
             // First line
             // + BYTES_DELTA (NEW_BYTES - OLD_BYTES) NEW_COUNT allocs BackTrace TRACEID 
 
-            // ReSharper disable once NotAccessedVariable
-            var direction = _scanner.ReadTextToken();
+            var direction = _scanner.ReadDirectionToken();
 
-            entry.BytesDelta = _scanner.ReadNumberToken();
+            entry.BytesDelta = _scanner.ReadNumberToken() * direction;
 
             var notInteresting = _scanner.ReadTextToken();
             Debug.Assert(notInteresting == "(");
@@ -158,17 +127,10 @@ namespace UmdhGui.Model.Parser
             // Second line
             // + COUNT_DELTA (NEW_COUNT - OLD_COUNT) BackTrace TRACEID allocations
 
-            var c = _scanner.PeekChar();
-            if (c != '+' && c != '-')
-            {
-                return;
-            }
 
+            direction = _scanner.ReadDirectionToken();
 
-            // ReSharper disable once RedundantAssignment
-            direction = _scanner.ReadTextToken();
-
-            entry.CountDelta = _scanner.ReadNumberToken();
+            entry.CountDelta = _scanner.ReadNumberToken() * direction;
 
             notInteresting = _scanner.ReadTextToken();
             Debug.Assert(notInteresting == "(");
@@ -186,7 +148,6 @@ namespace UmdhGui.Model.Parser
             entry.TraceId = _scanner.ReadTextToken();
 
             notInteresting = _scanner.ReadTextToken();
-            //System.Diagnostics.Debug.Assert(notInteresting == "allocations");
             entry.HasBody = notInteresting == "allocations";
         }
     }
