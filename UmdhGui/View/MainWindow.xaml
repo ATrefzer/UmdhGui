@@ -1,33 +1,33 @@
-﻿<RibbonWindow x:Class="UmdhGui.View.MainWindow"
-              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:local="clr-namespace:UmdhGui"
-              xmlns:converter="clr-namespace:UmdhGui.Converter"
-              xmlns:viewModel="clr-namespace:UmdhGui.ViewModel"
-              d:DataContext="{d:DesignInstance viewModel:MainViewModel, IsDesignTimeCreatable=False}"
-              Icon="pack://application:,,,/Images/bug_16x.ico"
-              mc:Ignorable="d"
-              Title="{x:Static local:Strings.Title}" Height="450" Width="575">
-    <RibbonWindow.Resources>
+﻿<Window x:Class="UmdhGui.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UmdhGui"
+        xmlns:converter="clr-namespace:UmdhGui.Converter"
+        xmlns:viewModel="clr-namespace:UmdhGui.ViewModel"
+        d:DataContext="{d:DesignInstance viewModel:MainViewModel, IsDesignTimeCreatable=False}"
+        Icon="pack://application:,,,/Images/bug_16x.ico"
+        mc:Ignorable="d"
+        Title="{x:Static local:Strings.Title}" Height="450" Width="775">
+    <Window.Resources>
         <converter:BoolToImageConverter x:Key="BoolToImageSettings"
                                         TrueImage="pack://application:,,,/Images/SettingsFile_32x.png"
                                         FalseImage="pack://application:,,,/Images/SettingsFileError_32x.png" />
         <BooleanToVisibilityConverter x:Key="BoolToVisible" />
-    </RibbonWindow.Resources>
+        <converter:InverseBooleanConverter x:Key="BoolInverseToVisible" />
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="100" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /> <!-- ribbon -->
+            <RowDefinition Height="Auto" /> <!-- expander -->
+            <RowDefinition Height="*" /> <!-- content -->
+            <RowDefinition Height="Auto" /> <!-- status bar -->
         </Grid.RowDefinitions>
 
-        <Ribbon Grid.Row="0" Visibility="Visible">
+
+        <Ribbon Grid.Row="0" Grid.ColumnSpan="3" Visibility="Visible">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu Visibility="Collapsed" />
             </Ribbon.ApplicationMenu>
@@ -132,11 +132,19 @@
                                   LargeImageSource="{Binding Settings.IsValid, Converter={StaticResource BoolToImageSettings}}"
                                   Label="{x:Static local:Strings.Settings}" />
                 </RibbonGroup>
+
+
+                <!-- Layout Group -->
+                <RibbonGroup Header="Layout">
+                    <RibbonToggleButton IsChecked="{Binding HorizontalLayout}" Label="Horizontal" />
+                </RibbonGroup>
             </RibbonTab>
+
         </Ribbon>
 
         <!-- Filter -->
-        <Expander Grid.Row="1" Header="{x:Static local:Strings.FilterGroup}" IsExpanded="False" Padding="5">
+        <Expander Grid.Row="1" Grid.ColumnSpan="3" Header="{x:Static local:Strings.FilterGroup}" IsExpanded="False"
+                  Padding="5">
             <DockPanel>
                 <Label Content="{x:Static local:Strings.Filter}" DockPanel.Dock="Left" Margin="0,0,5,0"
                        ToolTip="{x:Static local:Strings.TooltipFilter}" />
@@ -146,50 +154,111 @@
             </DockPanel>
         </Expander>
 
-        <!-- Trace data -->
-        <DataGrid Grid.Row="2" ItemsSource="{Binding TracesView}" AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedDiffEntry}"
-                  CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False"
-                  CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False"
-                  IsReadOnly="True" SelectionMode="Single">
 
-            <!-- 
+        <Grid Grid.Column="0" Grid.Row="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" /> <!-- splitter -->
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" /> <!-- splitter -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <!-- Trace data -->
+            <DataGrid ItemsSource="{Binding TracesView}" AutoGenerateColumns="False"
+                      SelectedItem="{Binding SelectedDiffEntry}"
+                      CanUserAddRows="False" CanUserResizeRows="False" CanUserDeleteRows="False"
+                      CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False"
+                      IsReadOnly="True" SelectionMode="Single">
+
+
+                <DataGrid.Style>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="Grid.Row" Value="0" />
+                        <Setter Property="Grid.Column" Value="0" />
+                        <Setter Property="Grid.ColumnSpan" Value="3" />
+                        <Setter Property="Grid.RowSpan" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HorizontalLayout}" Value="true">
+                                <Setter Property="Grid.Row" Value="0" />
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="1" />
+                                <Setter Property="Grid.RowSpan" Value="3" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Style>
+
+
+                <!-- 
             Wtf: IsSynchronizedWithCurrentItem takes care that a new CollectionView does not automatically select the first item.
             SelectedValue="{Binding Details, Mode=OneWayToSource}" SelectedValuePath="Stack"
             CurrentItem="{Binding CurrentTrace, Mode=OneWayToSource}"
             -->
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="{x:Static local:Strings.TraceId}" Binding="{Binding TraceId}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.CountDelta}" Binding="{Binding CountDelta}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.NewCount}" Binding="{Binding NewCount}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.OldCount}" Binding="{Binding OldCount}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.BytesDelta}" Binding="{Binding BytesDelta}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.NewBytes}" Binding="{Binding NewBytes}" />
-                <DataGridTextColumn Header="{x:Static local:Strings.OldBytes}" Binding="{Binding OldBytes}" Width="*" />
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{x:Static local:Strings.TraceId}" Binding="{Binding TraceId}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.CountDelta}" Binding="{Binding CountDelta}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.NewCount}" Binding="{Binding NewCount}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.OldCount}" Binding="{Binding OldCount}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.BytesDelta}" Binding="{Binding BytesDelta}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.NewBytes}" Binding="{Binding NewBytes}" />
+                    <DataGridTextColumn Header="{x:Static local:Strings.OldBytes}" Binding="{Binding OldBytes}"
+                                        Width="*" />
 
 
-                <!--
+                    <!--
                 Include stack trace in table
                 <DataGridTextColumn Header="{x:Static local:Strings.Stack}" Binding="{Binding Stack}" CanUserSort="False"  />
                 -->
 
-            </DataGrid.Columns>
-        </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
 
-        <GridSplitter Grid.Row="3" Grid.Column="0" Height="5" HorizontalAlignment="Stretch" />
+            <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                          Visibility="{Binding HorizontalLayout, Converter={StaticResource BoolInverseToVisible}}" />
+            <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                          Visibility="{Binding HorizontalLayout, Converter={StaticResource BoolToVisible}}" />
 
-        <!-- If height is set, the text box will not fill the splitter pane when resized. So set initial value in row definition instead. -->
-        <TextBox Grid.Row="4" IsReadOnly="True" Text="{Binding Details}"
-                 Background="LightYellow" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
-        <!-- 
+            <!-- If height is set, the text box will not fill the splitter pane when resized. So set initial value in row definition instead. -->
+            <TextBox IsReadOnly="True" Text="{Binding Details}"
+                     Background="LightYellow" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Grid.Row" Value="2" />
+                        <Setter Property="Grid.Column" Value="0" />
+                        <Setter Property="Grid.ColumnSpan" Value="3" />
+                        <Setter Property="Grid.RowSpan" Value="1" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HorizontalLayout}" Value="true">
+                                <Setter Property="Grid.Row" Value="0" />
+                                <Setter Property="Grid.Column" Value="2" />
+                                <Setter Property="Grid.ColumnSpan" Value="1" />
+                                <Setter Property="Grid.RowSpan" Value="3" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <!-- 
         Binding directly to DataGrid
         Text="{Binding Path=SelectedItem.Stack,ElementName=traceGrid}" 
         
         
         -->
 
-        <StatusBar Grid.Row="5" Height="20">
+        </Grid>
+
+
+        <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Height="20">
             <StatusBarItem>
                 <TextBlock Text="{Binding FilePath}" />
             </StatusBarItem>
@@ -200,4 +269,4 @@
 
         </StatusBar>
     </Grid>
-</RibbonWindow>
+</Window>

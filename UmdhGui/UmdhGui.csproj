@@ -99,6 +99,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApplicationController.cs" />
+    <Compile Include="Converter\InverseBooleanConverter.cs" />
     <Compile Include="Infrastructure\IProcess.cs" />
     <Compile Include="Infrastructure\ProcessHelper.cs" />
     <Compile Include="Model\GFlags.cs" />

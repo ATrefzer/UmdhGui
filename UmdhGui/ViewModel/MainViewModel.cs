@@ -133,6 +133,17 @@ namespace UmdhGui.ViewModel
             }
         }
 
+        private bool _horizontalLayout;
+        public bool HorizontalLayout
+        {
+            get => _horizontalLayout;
+            set
+            {
+                _horizontalLayout = value;
+                NotifyPropertyChanged(string.Empty);
+            }
+        }
+
 
         public ICommand TakeSnapshotCommand { get; }
         public ICommand ConfigureGFlagsCommand { get; }
@@ -185,6 +196,11 @@ namespace UmdhGui.ViewModel
 
                 Details = _selectedDiffEntry?.Stack;
             }
+        }
+
+        public int SplitterRow
+        {
+            get { return 3; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

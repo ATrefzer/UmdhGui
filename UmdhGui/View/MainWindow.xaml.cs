@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -9,7 +10,7 @@ namespace UmdhGui.View
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class MainWindow : RibbonWindow
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
